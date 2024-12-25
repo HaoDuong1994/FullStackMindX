@@ -10,9 +10,10 @@ const productRouter = require("./src/router/productRouter");
 const orderRouter = require("./src/router/orderRouter");
 const orderDetailsRouter = require("./src/router/orderDetailsRouter");
 const newsRouter = require("./src/router/newsRouter");
+const mongoDBConnect = require("./src/config/MongodbConnect");
+const Product = require("./src/Model/productModel");
 //Config body parser
 configBodyParser(app);
-
 //Config cors
 app.use(cors());
 //Config
@@ -21,9 +22,13 @@ configEJS(app, express);
 app.use(cookieParser());
 //App listening
 app.listen(process.env.PORT, () => {
-  console.log(`Example app listening on port`);
+  console.log(`Example app listening on port`, process.env.PORT);
 });
 
+const connection = async () => {
+  const connect = await mongoDBConnect();
+};
+connection();
 ////////////////////API//////////////////////////
 
 //Customer API
@@ -40,4 +45,3 @@ app.use("/orderDetails", orderDetailsRouter);
 
 //News API
 app.use("/news", newsRouter);
-console.log(1);
