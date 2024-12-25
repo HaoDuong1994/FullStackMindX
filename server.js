@@ -40,3 +40,4 @@ app.use("/orderDetails", orderDetailsRouter);
 
 //News API
 app.use("/news", newsRouter);
+console.log(1);
