@@ -4,6 +4,7 @@ const {
   getProductDetail,
   createProductController,
   filterProductController,
+  updateProductController,
 } = require("../controller/productController");
 const productRouter = express.Router();
 
@@ -15,4 +16,6 @@ productRouter.get("/filter", filterProductController);
 productRouter.get("/product-detail", getProductDetail);
 //Create product
 productRouter.post("/create", createProductController);
+//Update product
+productRouter.put("/update", updateProductController);
 module.exports = productRouter;

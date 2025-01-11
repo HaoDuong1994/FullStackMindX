@@ -30,8 +30,7 @@ const getAllProductService = async (reqQuery) => {
       }
     } else {
       // const [data] = await connection.query("select * from products");
-      const data = await Product.finđ({});
-      console.log(data);
+      const data = await Product.find({});
       return data;
     }
   } catch (error) {
@@ -153,11 +152,20 @@ const filterProductService = async (reqQuery) => {
         data,
       };
     }
-    //find product price from 500.000 to 1.500.000
+    //find product price from 1.500.000 to 2.500.5000
     if (price == 3) {
-      const [data] = await connection.query(
-        `SELECT * FROM products WHERE buyPrice BETWEEN 1500000 AND 2500000 AND productName like '%${productName}%' LIMIT 8`
-      );
+      const minPrice = 1500000;
+      const maxPrice = 2500000;
+      const keyWord = productName;
+      const data = await Product.find({
+        buyPrice: { $gte: minPrice, $lte: maxPrice },
+        productName: { $regex: keyWord, $options: "i" },
+      })
+        .limit(8)
+        .exec();
+      // const [data] = await connection.query(
+      //   `SELECT * FROM products WHERE buyPrice BETWEEN 1500000 AND 2500000 AND productName like '%${productName}%' LIMIT 8`
+      // );
       if (data.length == 0)
         return {
           EC: 1,
@@ -171,9 +179,17 @@ const filterProductService = async (reqQuery) => {
     }
     //find product price over 2.500.000
     if (price == 4) {
-      const [data] = await connection.query(
-        `SELECT * FROM products WHERE buyPrice > 2500000   AND productName like '%${productName}%' LIMIT 8`
-      );
+      const maxPrice = 2500000;
+      const keyWord = productName;
+      // const [data] = await connection.query(
+      //   `SELECT * FROM products WHERE buyPrice > 2500000   AND productName like '%${productName}%' LIMIT 8`
+      // );
+      const data = await Product.find({
+        buyPrice: { $gt: maxPrice },
+        productName: { $regex: keyWord, $options: "i" },
+      })
+        .limit(8)
+        .exec();
       if (data.length == 0)
         return {
           EC: 1,
@@ -189,10 +205,25 @@ const filterProductService = async (reqQuery) => {
     console.log("error from filter product service", error);
   }
 };
+const updateProductService = async (reqBody) => {
+  try {
+    console.log(reqBody);
+    const data = await Product.findOne({
+      productCode: reqBody.productCode,
+    });
+    console.log("dataaaa", data);
+    data.imgDetail.push({ url: reqBody.imgUrl });
+    await data.save();
+    return data;
+  } catch (error) {
+    console.log("error >>>>>>>>", error.message);
+  }
+};
 module.exports = {
   getAllProductService,
   createProductService,
   getDetailsProductService,
   searchProductService,
   filterProductService,
+  updateProductService,
 };

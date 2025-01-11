@@ -4,6 +4,7 @@ const {
   searchProductService,
   getDetailsProductService,
   filterProductService,
+  updateProductService,
 } = require("../service/productService");
 const getAllProductController = async (req, res) => {
   try {
@@ -81,9 +82,23 @@ const filterProductController = async (req, res) => {
     });
   }
 };
+const updateProductController = async (req, res) => {
+  try {
+    const data = await updateProductService(req.body);
+    res.status(201).json({
+      message: "Insert img url sucess",
+      data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
 module.exports = {
   getAllProductController,
   createProductController,
   getProductDetail,
   filterProductController,
+  updateProductController,
 };
