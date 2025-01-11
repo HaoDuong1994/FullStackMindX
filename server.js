@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-var cookieParser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const { configEJS } = require("./src/config/templateEngine");
 const customerRouter = require("./src/router/customerRouter");
@@ -11,12 +11,11 @@ const orderRouter = require("./src/router/orderRouter");
 const orderDetailsRouter = require("./src/router/orderDetailsRouter");
 const newsRouter = require("./src/router/newsRouter");
 const mongoDBConnect = require("./src/config/MongodbConnect");
-const Product = require("./src/Model/productModel");
 //Config body parser
 configBodyParser(app);
 //Config cors
 app.use(cors());
-//Config
+//Config view engine and static file
 configEJS(app, express);
 //Config cookie parsers
 app.use(cookieParser());
@@ -24,11 +23,12 @@ app.use(cookieParser());
 app.listen(process.env.PORT, () => {
   console.log(`Example app listening on port`, process.env.PORT);
 });
-
+// Config connection MongoDB
 const connection = async () => {
-  const connect = await mongoDBConnect();
+  await mongoDBConnect();
 };
 connection();
+
 ////////////////////API//////////////////////////
 
 //Customer API

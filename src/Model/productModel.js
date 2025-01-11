@@ -2,29 +2,29 @@ const mongoose = require("mongoose");
 const productSchema = new mongoose.Schema({
   productCode: {
     type: String,
-    require: true,
+    required: true,
     unique: true,
   },
   productName: {
     type: String,
-    require: true,
+    required: true,
   },
   buyPrice: {
     type: Number,
-    require: true,
+    required: true,
   },
   description: {
     type: String,
-    require: true,
+    required: true,
   },
   img: {
     type: String,
-    require: true,
+    required: true,
   },
   productType: {
     type: String,
     enum: ["backpack", "pant", "shoes", "shirt", "racket"],
-    require: true,
+    required: true,
   },
 });
 const Products = mongoose.model("Product", productSchema);

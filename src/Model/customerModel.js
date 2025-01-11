@@ -1,31 +1,27 @@
 const mongoose = require("mongoose");
 const customerSchema = new mongoose.Schema({
-  productCode: {
+  personID: {
+    type: Number,
+    require: true,
+    unique: true,
+  },
+  fullName: {
+    type: String,
+    require: true,
+  },
+  email: {
     type: String,
     require: true,
     unique: true,
   },
-  productName: {
+  passwordUser: {
     type: String,
     require: true,
   },
-  buyPrice: {
-    type: Number,
-    require: true,
-  },
-  description: {
+  imgProfile: {
     type: String,
-    require: true,
-  },
-  img: {
-    type: String,
-    require: true,
-  },
-  productType: {
-    type: String,
-    enum: ["backpack", "pant", "shoes", "shirt", "racket"],
     require: true,
   },
 });
-const Customers = mongoose.model("Customers", productSchema);
+const Customers = mongoose.model("Customers", customerSchema);
 module.exports = Customers;
