@@ -72,16 +72,19 @@ const createProductService = async (reqBody) => {
 
 const getDetailsProductService = async (productID) => {
   try {
-    const connection = await database();
-    const [data] = await connection.query(
-      `select * from products where productCode = '${productID}'`
-    );
-    const imgDetailProduct = await connection.query(
-      `select src from productImg where productId = '${productID}' `
-    );
-    const imgDetail = imgDetailProduct[0];
-    data[0].imgStorage = imgDetail;
-    return data[0];
+    console.log(productID);
+    // const connection = await database();
+    // const [data] = await connection.query(
+    //   `select * from products where productCode = '${productID}'`
+    // );
+    // const imgDetailProduct = await connection.query(
+    //   `select src from productImg where productId = '${productID}' `
+    // );
+    // const imgDetail = imgDetailProduct[0];
+    // data[0].imgStorage = imgDetail;
+    // return data[0];
+    const data = await Product.findOne({ productCode: productID }).exec();
+    return data;
   } catch (error) {
     console.log("error from getDetailProductService", error);
   }
