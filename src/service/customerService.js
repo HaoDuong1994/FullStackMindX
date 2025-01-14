@@ -1,6 +1,7 @@
 const database = require("../config/mysqlConnection");
 const { hashPass, verifiedPass } = require("./hashPassService");
 const getToken = require("./jwtservice");
+const Customers = require("../Model/customerModel");
 const getAllCustomerService = async (reqQuery) => {
   try {
     const connection = await database();
@@ -38,22 +39,42 @@ const createCustomerService = async (reqBody, res) => {
   }
 };
 const customerLoginService = async (reqBody) => {
-  const { email, password } = reqBody;
-  const connection = await database();
-  const [results, fill] = await connection.query(
-    `select * from customers where email = '${email}' `
-  );
-  if (results.length < 1) return "Email doesnt exist";
-  const hashPassWord = results[0].passwordUser;
-  const checkPass = await verifiedPass(password, hashPassWord);
-  if (checkPass) {
-    const token = getToken(reqBody);
-    return {
-      message: "Login success",
-      token: token,
-    };
+  try {
+    const { email, password } = reqBody;
+    console.log(reqBody);
+    // const connection = await database();
+    // const [results, fill] = await connection.query(
+    //   `select * from customers where email = '${email}' `
+    // );
+    // if (results.length < 1) return "Email doesnt exist";
+    // const hashPassWord = results[0].passwordUser;
+    // const checkPass = await verifiedPass(password, hashPassWord);
+    // if (checkPass) {
+    //   const token = getToken(reqBody);
+    //   return {
+    //     message: "Login success",
+    //     token: token,
+    //   };
+    // }
+    // return "Invalid PassWord";
+    const isEmailExist = await Customers.findOne({ email });
+    if (!isEmailExist) return "Email doesnt exist";
+    console.log(isEmailExist);
+    const passHashUser = isEmailExist.passwordUser;
+    console.log(passHashUser);
+    const checkPass = await verifiedPass(password, passHashUser);
+    console.log(checkPass);
+    if (checkPass) {
+      const token = getToken(reqBody);
+      return {
+        message: "Login success",
+        token: token,
+      };
+    }
+    return "Invalid PassWord";
+  } catch (error) {
+    console.log("error >>>>>>>>>.", error);
   }
-  return "Invalid PassWord";
 };
 module.exports = {
   getAllCustomerService,

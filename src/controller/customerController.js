@@ -58,7 +58,9 @@ const loginController = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log("result here >>>", error);
+    res.status(400).json({
+      message: error.message,
+    });
   }
 };
 module.exports = {
