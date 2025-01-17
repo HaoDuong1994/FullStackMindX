@@ -24,11 +24,16 @@ const createCustomerService = async (reqBody, res) => {
   try {
     const { name, email, password } = reqBody;
     const hashPassword = await hashPass(password);
-    const connection = await database();
-    const [results, files] = await connection.query(`
-      INSERT INTO customers (fullName, email, passwordUser)
-      VALUES ('${name}', '${email}', '${hashPassword}');
-      `);
+    // const connection = await database();
+    // const [results, files] = await connection.query(`
+    //   INSERT INTO customers (fullName, email, passwordUser)
+    //   VALUES ('${name}', '${email}', '${hashPassword}');
+    //   `);
+    const results = await Customers.create({
+      fullName: name,
+      email: email,
+      password: hashPassword,
+    });
     const token = getToken(reqBody);
     return { token, results };
   } catch (error) {
