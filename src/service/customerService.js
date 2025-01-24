@@ -4,11 +4,14 @@ const getToken = require("./jwtservice");
 const Customers = require("../Model/customerModel");
 const getAllCustomerService = async (reqQuery) => {
   try {
-    const connection = await database();
+    // const connection = await database();
     if (reqQuery) {
-      const [results] = await connection.query(
-        `SELECT * FROM customers WHERE email = '${reqQuery.email}'`
-      );
+      // const [results] = await connection.query(
+      //   `SELECT * FROM customers WHERE email = '${reqQuery.email}'`
+      // );
+      const { email } = reqQuery;
+      const results = await Customers.findOne({ email });
+      if (!results) return new Error("User cant found");
       return results;
     } else {
       const [results, fields] = await connection.query(
@@ -46,7 +49,6 @@ const createCustomerService = async (reqBody, res) => {
 const customerLoginService = async (reqBody) => {
   try {
     const { email, password } = reqBody;
-    console.log(reqBody);
     // const connection = await database();
     // const [results, fill] = await connection.query(
     //   `select * from customers where email = '${email}' `
@@ -64,11 +66,8 @@ const customerLoginService = async (reqBody) => {
     // return "Invalid PassWord";
     const isEmailExist = await Customers.findOne({ email });
     if (!isEmailExist) return "Email doesnt exist";
-    console.log(isEmailExist);
     const passHashUser = isEmailExist.passwordUser;
-    console.log(passHashUser);
     const checkPass = await verifiedPass(password, passHashUser);
-    console.log(checkPass);
     if (checkPass) {
       const token = getToken(reqBody);
       return {

@@ -11,8 +11,7 @@ const createOrderController = async (req, res) => {
       res.status(200).json({
         EC: 0,
         message: "Create order sucess",
-        idUser: Number(result.idUser),
-        idOrder: result.idOrder,
+        result,
       });
     }
   } catch (error) {
