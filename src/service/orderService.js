@@ -15,18 +15,22 @@ const createOrderService = async (reqBody) => {
     //     idOrder: results.insertId,
     //   };
     // }
-    const {
-      idUser,
-      products,
-      receiverName,
-      receiverAddress,
-      receiverePhoneNumber,
-    } = reqBody;
+    console.log(reqBody);
+    let methodPayment = "";
+    if (reqBody.card) {
+      methodPayment = "card";
+    } else {
+      methodPayment = "cash";
+    }
+    const { idUser, products, receiverName, address, phoneNumber, totalPrice } =
+      reqBody;
     const results = await Orders.create({
       idUser,
       receiverName,
-      receiverAddress,
-      receiverePhoneNumber,
+      receiverAddress: address,
+      receiverePhoneNumber: phoneNumber,
+      totalPrice,
+      methodPayment,
     });
     if (results._id) {
       const currentOrder = await Orders.findById(results._id).exec();

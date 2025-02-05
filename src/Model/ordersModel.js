@@ -6,6 +6,8 @@ const orderSchema = new mongoose.Schema({
   receiverName: String,
   receiverAddress: String,
   receiverPhoneNumber: String,
+  totalPrice: Number,
+  methodPayment: String,
 });
 const Orders = mongoose.model("Orders", orderSchema);
 module.exports = Orders;
